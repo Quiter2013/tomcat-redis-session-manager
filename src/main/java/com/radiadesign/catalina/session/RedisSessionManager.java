@@ -44,7 +44,7 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
 
 	protected static String name = "RedisSessionManager";
 
-	protected String serializationStrategyClass = "com.gnet.tomcat.session.JavaSerializer";
+	protected String serializationStrategyClass = "com.radiadesign.catalina.session.JavaSerializer";
 
 	/**
 	 * The lifecycle event support for this component.
@@ -175,7 +175,6 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
 		super.startInternal();
 
 		setState(LifecycleState.STARTING);
-		log.info("----------------第一步------------------");
 		Boolean attachedToValve = false;
 		for (Valve valve : getContext().getPipeline().getValves()) {
 			if (valve instanceof RedisSessionHandlerValve) {
@@ -205,7 +204,6 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
 			log.fatal("Unable to load serializer", e);
 			throw new LifecycleException(e);
 		}
-		log.info("--------------------第三步-------------------------");
 		log.info("Will expire sessions after " + getMaxInactiveInterval()
 				+ " seconds");
 
@@ -536,7 +534,6 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle {
 
 	private void initializeSerializer() throws ClassNotFoundException,
 			IllegalAccessException, InstantiationException {
-		log.info("--------------------第二步-------------------------");
 		log.info("Attempting to use serializer :" + serializationStrategyClass);
 		serializer = (Serializer) Class.forName(serializationStrategyClass)
 				.newInstance();
